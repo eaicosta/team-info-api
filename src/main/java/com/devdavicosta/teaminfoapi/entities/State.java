@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name="estados")
@@ -18,15 +19,19 @@ public class State implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	private String name;
+	
+	@NotBlank
+	private String nome;
+	
+	@NotBlank
 	private String uf;
 	
 	public State() {
 	}
 
-	public State(Long id, String name, String uf) {
+	public State(Long id, String nome, String uf) {
 		this.id = id;
-		this.name = name;
+		this.nome = nome;
 		this.uf = uf;
 	}
 
@@ -38,12 +43,12 @@ public class State implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public String getUf() {
