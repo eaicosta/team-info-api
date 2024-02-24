@@ -27,21 +27,21 @@ public class CoachResource {
 	
 	@GetMapping
 	public ResponseEntity<List<Coach>> findAll() {
-		List<Coach> allObj = service.findAll();
-		return ResponseEntity.ok().body(allObj);
+		List<Coach> obj = service.findAll();
+		return ResponseEntity.ok().body(obj);
 	}
 	
 	@GetMapping(value="/{id}")
 	public ResponseEntity<Coach> findById(@PathVariable Long id) {
-		Coach idObj = service.findById(id);
-		return ResponseEntity.ok().body(idObj);
+		Coach obj = service.findById(id);
+		return ResponseEntity.ok().body(obj);
 	}
 	
 	@PostMapping
 	public ResponseEntity<Coach> insert(@RequestBody Coach obj) {
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-		return ResponseEntity.created(uri).body(obj);
+		return ResponseEntity.created(uri).build();
 	}
 	
 	@PutMapping(value="/{id}")

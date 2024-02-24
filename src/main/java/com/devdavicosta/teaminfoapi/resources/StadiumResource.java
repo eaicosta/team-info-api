@@ -47,17 +47,9 @@ public class StadiumResource {
 	
 	@PostMapping
 	public ResponseEntity<Stadium> insert(@RequestBody Stadium obj) {
-		
-		if (obj.getEstado() != null && obj.getEstado().getId() != null) {
-			State estado = stateRepository.findById(obj.getEstado().getId()).orElseThrow(() -> new EntityNotFoundException("Estado não encontrado com o id especificado."));
-			obj.setEstado(estado);
-		} else {
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-	    }
-		
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-		return ResponseEntity.created(uri).body(obj);
+		return ResponseEntity.created(uri).build();
 	}
 	
 	@PutMapping(value="/{id}")
