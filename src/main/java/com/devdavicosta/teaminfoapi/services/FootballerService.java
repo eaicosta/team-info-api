@@ -7,47 +7,63 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import com.devdavicosta.teaminfoapi.entities.Coach;
 import com.devdavicosta.teaminfoapi.entities.Country;
-import com.devdavicosta.teaminfoapi.repositories.CoachRepository;
+import com.devdavicosta.teaminfoapi.entities.Footballer;
+import com.devdavicosta.teaminfoapi.entities.Position;
+import com.devdavicosta.teaminfoapi.entities.Team;
+import com.devdavicosta.teaminfoapi.repositories.FootballerRepository;
 import com.devdavicosta.teaminfoapi.services.exceptions.DatabaseException;
 import com.devdavicosta.teaminfoapi.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class CoachService {
+public class FootballerService {
 
 	@Autowired
-	private CoachRepository repository;
+	private FootballerRepository repository;
+	
+	@Autowired
+	private PositionService positionService;
 	
 	@Autowired
 	private CountryService countryService;
 	
-	public List<Coach> findAll() {
+	@Autowired
+	private TeamService teamService;
+	
+	public List<Footballer> findAll() {
 		return repository.findAll();
 	}
 	
-	public Coach findById(Long id) {
-		Optional<Coach> obj = repository.findById(id);
+	public Footballer findById(Long id) {
+		Optional<Footballer> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
-	public List<Coach> findByName(String text) {
-		return repository.findByCoachName(text);
+	public List<Footballer> findByName(String text) {
+		return repository.findByName(text);
 	}
 	
-	public List<Coach> findByCountry(String text) {
+	public List<Footballer> findByPosition(String text) {
+		return repository.findByPosition(text);
+	}
+	
+	public List<Footballer> findByTeam(String text) {
+		return repository.findByTeam(text);
+	}
+	
+	public List<Footballer> findByCountry(String text) {
 		return repository.findByCountry(text);
 	}
 	
-	public Coach insert(Coach obj) {
+	public Footballer insert(Footballer obj) {
 		return repository.save(obj);
 	}
 	
-	public Coach update(Long id, Coach obj) {
+	public Footballer update(Long id, Footballer obj) {
 		try {
-			Coach entity = repository.getReferenceById(id);
+			Footballer entity = repository.getReferenceById(id);
 			updateData(entity, obj);
 			return repository.save(entity);
 		} catch (EntityNotFoundException e) {
@@ -55,14 +71,18 @@ public class CoachService {
 		}
 	}
 	
-	private void updateData(Coach entity, Coach obj) {
+	private void updateData(Footballer entity, Footballer obj) {
 		entity.setNome(obj.getNome());
+		Position position = positionService.findById(obj.getPosicao().getId());
+		entity.setPosicao(position);
 		Country country = countryService.findById(obj.getPais().getId());
 		entity.setPais(country);
+		Team time = teamService.findById(obj.getTime().getId());
+		entity.setTime(time);
 	}
 	
 	public void delete(Long id) {
-		 try {
+		try {
 			 if (!repository.existsById(id)) throw new ResourceNotFoundException(id);
 			 repository.deleteById(id);
 		 } catch (DataIntegrityViolationException e) {

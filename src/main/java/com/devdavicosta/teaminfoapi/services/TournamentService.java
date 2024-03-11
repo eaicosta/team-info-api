@@ -7,47 +7,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import com.devdavicosta.teaminfoapi.entities.Coach;
-import com.devdavicosta.teaminfoapi.entities.Country;
-import com.devdavicosta.teaminfoapi.repositories.CoachRepository;
+import com.devdavicosta.teaminfoapi.entities.Team;
+import com.devdavicosta.teaminfoapi.entities.Tournament;
+import com.devdavicosta.teaminfoapi.repositories.TournamentRepository;
 import com.devdavicosta.teaminfoapi.services.exceptions.DatabaseException;
 import com.devdavicosta.teaminfoapi.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class CoachService {
+public class TournamentService {
 
 	@Autowired
-	private CoachRepository repository;
+	private TournamentRepository repository;
 	
 	@Autowired
-	private CountryService countryService;
+	private TeamService teamService;
 	
-	public List<Coach> findAll() {
+	public List<Tournament> findAll() {
 		return repository.findAll();
 	}
 	
-	public Coach findById(Long id) {
-		Optional<Coach> obj = repository.findById(id);
+	public Tournament findById(Long id) {
+		Optional<Tournament> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
+
 	}
 	
-	public List<Coach> findByName(String text) {
-		return repository.findByCoachName(text);
+	public List<Tournament> findByName(String text) {
+		return repository.findByTournamentName(text);
 	}
 	
-	public List<Coach> findByCountry(String text) {
-		return repository.findByCountry(text);
+	public List<Tournament> findByYear(String text) {
+		return repository.findByYear(text);
 	}
 	
-	public Coach insert(Coach obj) {
+	public List<Tournament> findByChampion(String text) {
+		return repository.findByChampion(text);
+	}
+	
+	public Tournament insert(Tournament obj) {
 		return repository.save(obj);
 	}
 	
-	public Coach update(Long id, Coach obj) {
+	public Tournament update(Long id, Tournament obj) {
 		try {
-			Coach entity = repository.getReferenceById(id);
+			Tournament entity = repository.getReferenceById(id);
 			updateData(entity, obj);
 			return repository.save(entity);
 		} catch (EntityNotFoundException e) {
@@ -55,14 +60,15 @@ public class CoachService {
 		}
 	}
 	
-	private void updateData(Coach entity, Coach obj) {
+	private void updateData(Tournament entity, Tournament obj) {
 		entity.setNome(obj.getNome());
-		Country country = countryService.findById(obj.getPais().getId());
-		entity.setPais(country);
+		entity.setAno_edicao(obj.getAno_edicao());
+		Team team = teamService.findById(obj.getTime_campeao().getId());
+		entity.setTime_campeao(team);
 	}
 	
 	public void delete(Long id) {
-		 try {
+		try {
 			 if (!repository.existsById(id)) throw new ResourceNotFoundException(id);
 			 repository.deleteById(id);
 		 } catch (DataIntegrityViolationException e) {

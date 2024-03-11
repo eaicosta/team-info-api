@@ -7,47 +7,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import com.devdavicosta.teaminfoapi.entities.Coach;
-import com.devdavicosta.teaminfoapi.entities.Country;
-import com.devdavicosta.teaminfoapi.repositories.CoachRepository;
+import com.devdavicosta.teaminfoapi.entities.Position;
+import com.devdavicosta.teaminfoapi.repositories.PositionRepository;
 import com.devdavicosta.teaminfoapi.services.exceptions.DatabaseException;
 import com.devdavicosta.teaminfoapi.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class CoachService {
+public class PositionService {
 
 	@Autowired
-	private CoachRepository repository;
+	private PositionRepository repository;
 	
-	@Autowired
-	private CountryService countryService;
-	
-	public List<Coach> findAll() {
+	public List<Position> findAll() {
 		return repository.findAll();
 	}
 	
-	public Coach findById(Long id) {
-		Optional<Coach> obj = repository.findById(id);
+	public Position findById(Long id) {
+		Optional<Position> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
-	public List<Coach> findByName(String text) {
-		return repository.findByCoachName(text);
+	public List<Position> findByName(String text) {
+		return repository.findByName(text);
 	}
 	
-	public List<Coach> findByCountry(String text) {
-		return repository.findByCountry(text);
-	}
-	
-	public Coach insert(Coach obj) {
+	public Position insert(Position obj) {
 		return repository.save(obj);
 	}
 	
-	public Coach update(Long id, Coach obj) {
+	public Position update(Long id, Position obj) {
 		try {
-			Coach entity = repository.getReferenceById(id);
+			Position entity = repository.getReferenceById(id);
 			updateData(entity, obj);
 			return repository.save(entity);
 		} catch (EntityNotFoundException e) {
@@ -55,14 +47,13 @@ public class CoachService {
 		}
 	}
 	
-	private void updateData(Coach entity, Coach obj) {
+	private void updateData(Position entity, Position obj) {
 		entity.setNome(obj.getNome());
-		Country country = countryService.findById(obj.getPais().getId());
-		entity.setPais(country);
+		entity.setAbreviacao(obj.getAbreviacao());
 	}
 	
 	public void delete(Long id) {
-		 try {
+		try {
 			 if (!repository.existsById(id)) throw new ResourceNotFoundException(id);
 			 repository.deleteById(id);
 		 } catch (DataIntegrityViolationException e) {

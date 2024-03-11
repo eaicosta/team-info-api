@@ -12,56 +12,40 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.devdavicosta.teaminfoapi.entities.Stadium;
-import com.devdavicosta.teaminfoapi.resources.util.URL;
-import com.devdavicosta.teaminfoapi.services.StadiumService;
+import com.devdavicosta.teaminfoapi.entities.Country;
+import com.devdavicosta.teaminfoapi.services.CountryService;
 
 @RestController
-@RequestMapping(value="/stadiums")
-public class StadiumResource {
+@RequestMapping(value="/countries")
+public class CountryResource {
 	
 	@Autowired
-	private StadiumService service;
-
+	private CountryService service;
+	
 	@GetMapping
-	public ResponseEntity<List<Stadium>> findAll() {
-		List<Stadium> list = service.findAll();
+	public ResponseEntity<List<Country>> findAll() {
+		List<Country> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value="/{id}")
-	public ResponseEntity<Stadium> findById(@PathVariable Long id) {
-		Stadium obj = service.findById(id);
+	public ResponseEntity<Country> findById(@PathVariable Long id) {
+		Country obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
-	@GetMapping(value="/namesearch")
-	public ResponseEntity<List<Stadium>> findByName(@RequestParam(value="text", defaultValue="") String text) {
-		text = URL.decodeParam(text);
-		List<Stadium> list = service.findByName(text);
-		return ResponseEntity.ok().body(list);
-	}
-	
-	@GetMapping(value="/statesearch")
-	public ResponseEntity<List<Stadium>> findByState(@RequestParam(value="text", defaultValue="") String text) {
-		text = URL.decodeParam(text);
-		List<Stadium> list = service.findByState(text);
-		return ResponseEntity.ok().body(list);
-	}
-	
 	@PostMapping
-	public ResponseEntity<Stadium> insert(@RequestBody Stadium obj) {
+	public ResponseEntity<Country> insert(@RequestBody Country obj) {
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 	
 	@PutMapping(value="/{id}")
-	public ResponseEntity<Stadium> update(@PathVariable Long id, @RequestBody Stadium obj) {
+	public ResponseEntity<Country> update(@PathVariable Long id, @RequestBody Country obj) {
 		obj = service.update(id, obj);
 		return ResponseEntity.ok().body(obj);
 	}

@@ -3,6 +3,8 @@ package com.devdavicosta.teaminfoapi.entities;
 import java.io.Serializable;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +31,7 @@ public class Stadium implements Serializable{
 	private String nome_popular;
 	
 	@ManyToOne
+	@JsonIgnoreProperties(value="pais")
 	@JoinColumn(name="id_estado")
 	private State estado;
 	

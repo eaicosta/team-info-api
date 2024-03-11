@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
@@ -20,17 +22,21 @@ public class State implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	@ManyToOne
+	@JoinColumn(name="id_pais")
+	private Country pais;
+	
 	@NotBlank
 	private String nome;
 	
-	@NotBlank
 	private String uf;
 	
 	public State() {
 	}
 
-	public State(Long id, String nome, String uf) {
+	public State(Long id, Country pais, String nome, String uf) {
 		this.id = id;
+		this.pais = pais;
 		this.nome = nome;
 		this.uf = uf;
 	}
@@ -41,6 +47,14 @@ public class State implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Country getPais() {
+		return pais;
+	}
+
+	public void setPais(Country pais) {
+		this.pais = pais;
 	}
 
 	public String getNome() {

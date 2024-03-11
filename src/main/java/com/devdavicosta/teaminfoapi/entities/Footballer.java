@@ -1,7 +1,8 @@
 package com.devdavicosta.teaminfoapi.entities;
 
-import java.io.Serializable;
 import java.util.Objects;
+
+import com.devdavicosta.teaminfoapi.dto.TeamDTO;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,11 +14,9 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name="tecnicos")
-public class Coach implements Serializable {
+@Table(name="jogadores")
+public class Footballer {
 
-	private static final long serialVersionUID = 1L;
-	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
@@ -26,16 +25,26 @@ public class Coach implements Serializable {
 	private String nome;
 	
 	@ManyToOne
+	@JoinColumn(name="id_posicao")
+	private Position posicao;
+	
+	@ManyToOne
 	@JoinColumn(name="id_pais")
 	private Country pais;
 	
-	public Coach() {
+	@ManyToOne
+	@JoinColumn(name="id_time")
+	private Team time;
+
+	public Footballer() {
 	}
 
-	public Coach(Long id, String nome, Country pais) {
+	public Footballer(Long id, @NotBlank String nome, Position posicao, Country pais, Team time) {
 		this.id = id;
 		this.nome = nome;
+		this.posicao = posicao;
 		this.pais = pais;
+		this.time = time;
 	}
 
 	public Long getId() {
@@ -54,12 +63,28 @@ public class Coach implements Serializable {
 		this.nome = nome;
 	}
 
+	public Position getPosicao() {
+		return posicao;
+	}
+
+	public void setPosicao(Position posicao) {
+		this.posicao = posicao;
+	}
+
 	public Country getPais() {
 		return pais;
 	}
 
 	public void setPais(Country pais) {
 		this.pais = pais;
+	}
+
+	public TeamDTO getTime() {
+		return new TeamDTO(this.time);
+	}
+
+	public void setTime(Team time) {
+		this.time = time;
 	}
 
 	@Override
@@ -75,7 +100,7 @@ public class Coach implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Coach other = (Coach) obj;
+		Footballer other = (Footballer) obj;
 		return Objects.equals(id, other.id);
 	}
 }

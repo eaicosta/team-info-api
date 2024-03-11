@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.devdavicosta.teaminfoapi.entities.Coach;
+import com.devdavicosta.teaminfoapi.resources.util.URL;
 import com.devdavicosta.teaminfoapi.services.CoachService;
 
 @RestController
@@ -27,14 +29,28 @@ public class CoachResource {
 	
 	@GetMapping
 	public ResponseEntity<List<Coach>> findAll() {
-		List<Coach> obj = service.findAll();
-		return ResponseEntity.ok().body(obj);
+		List<Coach> list = service.findAll();
+		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value="/{id}")
 	public ResponseEntity<Coach> findById(@PathVariable Long id) {
 		Coach obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
+	}
+	
+	@GetMapping(value="/namesearch")
+	public ResponseEntity<List<Coach>> findByName(@RequestParam(value="text", defaultValue="") String text) {
+		text = URL.decodeParam(text);
+		List<Coach> list = service.findByName(text);
+		return ResponseEntity.ok().body(list);
+	}
+	
+	@GetMapping(value="/nationalitysearch")
+	public ResponseEntity<List<Coach>> findByCountry(@RequestParam(value="text", defaultValue="") String text) {
+		text = URL.decodeParam(text);
+		List<Coach> list = service.findByCountry(text);
+		return ResponseEntity.ok().body(list);
 	}
 	
 	@PostMapping

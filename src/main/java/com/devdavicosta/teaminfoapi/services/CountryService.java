@@ -7,47 +7,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import com.devdavicosta.teaminfoapi.entities.Coach;
 import com.devdavicosta.teaminfoapi.entities.Country;
-import com.devdavicosta.teaminfoapi.repositories.CoachRepository;
+import com.devdavicosta.teaminfoapi.repositories.CountryRepository;
 import com.devdavicosta.teaminfoapi.services.exceptions.DatabaseException;
 import com.devdavicosta.teaminfoapi.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class CoachService {
+public class CountryService {
 
 	@Autowired
-	private CoachRepository repository;
+	private CountryRepository repository;
 	
-	@Autowired
-	private CountryService countryService;
-	
-	public List<Coach> findAll() {
+	public List<Country> findAll() {
 		return repository.findAll();
 	}
 	
-	public Coach findById(Long id) {
-		Optional<Coach> obj = repository.findById(id);
+	public Country findById(Long id) {
+		Optional<Country> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
-	public List<Coach> findByName(String text) {
-		return repository.findByCoachName(text);
-	}
-	
-	public List<Coach> findByCountry(String text) {
-		return repository.findByCountry(text);
-	}
-	
-	public Coach insert(Coach obj) {
+	public Country insert(Country obj) {
 		return repository.save(obj);
 	}
 	
-	public Coach update(Long id, Coach obj) {
+	public Country update(Long id, Country obj) {
 		try {
-			Coach entity = repository.getReferenceById(id);
+			Country entity = repository.getReferenceById(id);
 			updateData(entity, obj);
 			return repository.save(entity);
 		} catch (EntityNotFoundException e) {
@@ -55,14 +43,12 @@ public class CoachService {
 		}
 	}
 	
-	private void updateData(Coach entity, Coach obj) {
+	private void updateData(Country entity, Country obj) {
 		entity.setNome(obj.getNome());
-		Country country = countryService.findById(obj.getPais().getId());
-		entity.setPais(country);
 	}
 	
 	public void delete(Long id) {
-		 try {
+		try {
 			 if (!repository.existsById(id)) throw new ResourceNotFoundException(id);
 			 repository.deleteById(id);
 		 } catch (DataIntegrityViolationException e) {

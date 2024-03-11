@@ -7,17 +7,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name="tecnicos")
-public class Coach implements Serializable {
+@Table(name="paises")
+public class Country implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
@@ -25,17 +23,12 @@ public class Coach implements Serializable {
 	@NotBlank
 	private String nome;
 	
-	@ManyToOne
-	@JoinColumn(name="id_pais")
-	private Country pais;
-	
-	public Coach() {
+	public Country() {
 	}
 
-	public Coach(Long id, String nome, Country pais) {
+	public Country(Long id, @NotBlank String nome) {
 		this.id = id;
 		this.nome = nome;
-		this.pais = pais;
 	}
 
 	public Long getId() {
@@ -54,14 +47,6 @@ public class Coach implements Serializable {
 		this.nome = nome;
 	}
 
-	public Country getPais() {
-		return pais;
-	}
-
-	public void setPais(Country pais) {
-		this.pais = pais;
-	}
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -75,7 +60,7 @@ public class Coach implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Coach other = (Coach) obj;
+		Country other = (Country) obj;
 		return Objects.equals(id, other.id);
 	}
 }

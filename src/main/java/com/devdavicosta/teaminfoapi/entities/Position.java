@@ -7,14 +7,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name="tecnicos")
-public class Coach implements Serializable {
+@Table(name="posicoes")
+public class Position implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -25,17 +23,16 @@ public class Coach implements Serializable {
 	@NotBlank
 	private String nome;
 	
-	@ManyToOne
-	@JoinColumn(name="id_pais")
-	private Country pais;
+	@NotBlank
+	private String abreviacao;
 	
-	public Coach() {
+	public Position() {
 	}
 
-	public Coach(Long id, String nome, Country pais) {
+	public Position(Long id, String nome, String abreviacao) {
 		this.id = id;
 		this.nome = nome;
-		this.pais = pais;
+		this.abreviacao = abreviacao;
 	}
 
 	public Long getId() {
@@ -54,12 +51,12 @@ public class Coach implements Serializable {
 		this.nome = nome;
 	}
 
-	public Country getPais() {
-		return pais;
+	public String getAbreviacao() {
+		return abreviacao;
 	}
 
-	public void setPais(Country pais) {
-		this.pais = pais;
+	public void setAbreviacao(String abreviacao) {
+		this.abreviacao = abreviacao;
 	}
 
 	@Override
@@ -75,7 +72,7 @@ public class Coach implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Coach other = (Coach) obj;
+		Position other = (Position) obj;
 		return Objects.equals(id, other.id);
 	}
 }
