@@ -46,7 +46,7 @@ public class CoachResource {
 		return ResponseEntity.ok().body(list);
 	}
 	
-	@GetMapping(value="/nationalitysearch")
+	@GetMapping(value="/countrysearch")
 	public ResponseEntity<List<Coach>> findByCountry(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
 		List<Coach> list = service.findByCountry(text);

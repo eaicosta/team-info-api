@@ -29,6 +29,10 @@ public class CountryService {
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
+	public List<Country> findByName(String text) {
+		return repository.findByName(text);
+	}
+	
 	public Country insert(Country obj) {
 		return repository.save(obj);
 	}

@@ -25,7 +25,7 @@ public class CoachService {
 	private CountryService countryService;
 	
 	public List<Coach> findAll() {
-		return repository.findAll();
+		return repository.searchAll();
 	}
 	
 	public Coach findById(Long id) {
@@ -34,7 +34,7 @@ public class CoachService {
 	}
 	
 	public List<Coach> findByName(String text) {
-		return repository.findByCoachName(text);
+		return repository.findByName(text);
 	}
 	
 	public List<Coach> findByCountry(String text) {

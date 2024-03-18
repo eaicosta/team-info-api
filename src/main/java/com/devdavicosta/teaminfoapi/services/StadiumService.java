@@ -25,7 +25,7 @@ public class StadiumService {
 	private StateService stateService;
 	
 	public List<Stadium> findAll() {
-		return repository.findAll();
+		return repository.searchAll();
 	}
 	
 	public Stadium findById(Long id) {
@@ -34,7 +34,7 @@ public class StadiumService {
 	}
 	
 	public List<Stadium> findByName(String text) {
-		return repository.findByStadiumName(text);
+		return repository.findByName(text);
 	}
 	
 	public List<Stadium> findByState(String text) {

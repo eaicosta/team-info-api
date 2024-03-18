@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.devdavicosta.teaminfoapi.dto.RivalDTO;
+import com.devdavicosta.teaminfoapi.dto.TeamDTO;
 import com.devdavicosta.teaminfoapi.entities.Team;
 import com.devdavicosta.teaminfoapi.resources.util.URL;
 import com.devdavicosta.teaminfoapi.services.TeamService;
@@ -31,8 +32,8 @@ public class TeamResource {
 	private TeamService service;
 	
 	@GetMapping
-	public ResponseEntity<List<Team>> findAll() {
-		List<Team> list = service.findAll();
+	public ResponseEntity<List<TeamDTO>> findAll() {
+		List<TeamDTO> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
@@ -43,23 +44,30 @@ public class TeamResource {
 	}
 	
 	@GetMapping(value="/namesearch")
-	public ResponseEntity<List<Team>> findByName(@RequestParam(value="text", defaultValue="") String text) {
+	public ResponseEntity<List<TeamDTO>> findByName(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
-		List<Team> list = service.findByName(text);
+		List<TeamDTO> list = service.findByName(text);
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value="/statesearch")
-	public ResponseEntity<List<Team>> findByState(@RequestParam(value="text", defaultValue="") String text) {
+	public ResponseEntity<List<TeamDTO>> findByState(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
-		List<Team> list = service.findByState(text);
+		List<TeamDTO> list = service.findByState(text);
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value="/countrysearch")
-	public ResponseEntity<List<Team>> findByCountry(@RequestParam(value="text", defaultValue="") String text) {
+	public ResponseEntity<List<TeamDTO>> findByCountry(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
-		List<Team> list = service.findByCountry(text);
+		List<TeamDTO> list = service.findByCountry(text);
+		return ResponseEntity.ok().body(list);
+	}
+	
+	@GetMapping(value="/coachsearch")
+	public ResponseEntity<List<TeamDTO>> findByCoach(@RequestParam(value="text", defaultValue="") String text) {
+		text = URL.decodeParam(text);
+		List<TeamDTO> list = service.findByCoach(text);
 		return ResponseEntity.ok().body(list);
 	}
 	

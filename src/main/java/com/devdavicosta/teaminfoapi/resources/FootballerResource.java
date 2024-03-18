@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.devdavicosta.teaminfoapi.dto.FootballerDTO;
 import com.devdavicosta.teaminfoapi.entities.Footballer;
 import com.devdavicosta.teaminfoapi.resources.util.URL;
 import com.devdavicosta.teaminfoapi.services.FootballerService;
@@ -28,8 +29,8 @@ public class FootballerResource {
 	private FootballerService service;
 	
 	@GetMapping
-	public ResponseEntity<List<Footballer>> findAll() {
-		List<Footballer> list = service.findAll();
+	public ResponseEntity<List<FootballerDTO>> findAll() {
+		List<FootballerDTO> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
@@ -40,30 +41,30 @@ public class FootballerResource {
 	}
 	
 	@GetMapping(value="/namesearch")
-	public ResponseEntity<List<Footballer>> findByName(@RequestParam(value="text", defaultValue="") String text) {
+	public ResponseEntity<List<FootballerDTO>> findByName(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
-		List<Footballer> list = service.findByName(text);
+		List<FootballerDTO> list = service.findByName(text);
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value="/positionsearch")
-	public ResponseEntity<List<Footballer>> findByPosition(@RequestParam(value="text", defaultValue="") String text) {
+	public ResponseEntity<List<FootballerDTO>> findByPosition(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
-		List<Footballer> list = service.findByPosition(text);
+		List<FootballerDTO> list = service.findByPosition(text);
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value="/teamsearch")
-	public ResponseEntity<List<Footballer>> findByTeam(@RequestParam(value="text", defaultValue="") String text) {
+	public ResponseEntity<List<FootballerDTO>> findByTeam(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
-		List<Footballer> list = service.findByTeam(text);
+		List<FootballerDTO> list = service.findByTeam(text);
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value="/countrysearch")
-	public ResponseEntity<List<Footballer>> findByCountry(@RequestParam(value="text", defaultValue="") String text) {
+	public ResponseEntity<List<FootballerDTO>> findByCountry(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
-		List<Footballer> list = service.findByCountry(text);
+		List<FootballerDTO> list = service.findByCountry(text);
 		return ResponseEntity.ok().body(list);
 	}
 	

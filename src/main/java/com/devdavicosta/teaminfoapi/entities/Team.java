@@ -8,7 +8,6 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -52,13 +51,11 @@ public class Team implements Serializable {
 	private String hino;
 	
 	@ManyToOne
-	@JsonIgnoreProperties(value="pais")
 	@JoinColumn(name="id_estado")
 	private State estado;
 	
 	@ManyToOne
 	@JoinColumn(name="id_estadio")
-	@JsonIgnoreProperties(value="estado")
 	private Stadium estadio;
 	
 	@OneToOne

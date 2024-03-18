@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.devdavicosta.teaminfoapi.entities.State;
+import com.devdavicosta.teaminfoapi.resources.util.URL;
 import com.devdavicosta.teaminfoapi.services.StateService;
 
 @RestController
@@ -35,6 +37,20 @@ public class StateResource {
 	public ResponseEntity<State> findById(@PathVariable Long id) {
 		State obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
+	}
+	
+	@GetMapping(value="/namesearch")
+	public ResponseEntity<List<State>> findByName(@RequestParam(value="text", defaultValue="") String text) {
+		text = URL.decodeParam(text);
+		List<State> list = service.findByName(text);
+		return ResponseEntity.ok().body(list);
+	}
+	
+	@GetMapping(value="/countrysearch")
+	public ResponseEntity<List<State>> findByCountry(@RequestParam(value="text", defaultValue="") String text) {
+		text = URL.decodeParam(text);
+		List<State> list = service.findByCountry(text);
+		return ResponseEntity.ok().body(list);
 	}
 	
 	@PostMapping

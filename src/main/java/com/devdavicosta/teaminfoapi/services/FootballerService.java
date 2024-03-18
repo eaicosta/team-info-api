@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.devdavicosta.teaminfoapi.dto.FootballerDTO;
 import com.devdavicosta.teaminfoapi.entities.Country;
 import com.devdavicosta.teaminfoapi.entities.Footballer;
 import com.devdavicosta.teaminfoapi.entities.Position;
@@ -32,8 +33,8 @@ public class FootballerService {
 	@Autowired
 	private TeamService teamService;
 	
-	public List<Footballer> findAll() {
-		return repository.findAll();
+	public List<FootballerDTO> findAll() {
+		return repository.searchAll();
 	}
 	
 	public Footballer findById(Long id) {
@@ -41,19 +42,19 @@ public class FootballerService {
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
-	public List<Footballer> findByName(String text) {
+	public List<FootballerDTO> findByName(String text) {
 		return repository.findByName(text);
 	}
 	
-	public List<Footballer> findByPosition(String text) {
+	public List<FootballerDTO> findByPosition(String text) {
 		return repository.findByPosition(text);
 	}
 	
-	public List<Footballer> findByTeam(String text) {
+	public List<FootballerDTO> findByTeam(String text) {
 		return repository.findByTeam(text);
 	}
 	
-	public List<Footballer> findByCountry(String text) {
+	public List<FootballerDTO> findByCountry(String text) {
 		return repository.findByCountry(text);
 	}
 	

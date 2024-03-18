@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.devdavicosta.teaminfoapi.dto.TournamentDTO;
 import com.devdavicosta.teaminfoapi.entities.Tournament;
 import com.devdavicosta.teaminfoapi.resources.util.URL;
 import com.devdavicosta.teaminfoapi.services.TournamentService;
@@ -28,8 +29,8 @@ public class TournamentResource {
 	private TournamentService service;
 	
 	@GetMapping
-	public ResponseEntity<List<Tournament>> findAll() {
-		List<Tournament> list = service.findAll();
+	public ResponseEntity<List<TournamentDTO>> findAll() {
+		List<TournamentDTO> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
@@ -40,23 +41,23 @@ public class TournamentResource {
 	}
 	
 	@GetMapping(value="/namesearch")
-	public ResponseEntity<List<Tournament>> findByName(@RequestParam(value="text", defaultValue="") String text) {
+	public ResponseEntity<List<TournamentDTO>> findByName(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
-		List<Tournament> list = service.findByName(text);
+		List<TournamentDTO> list = service.findByName(text);
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value="/yearsearch")
-	public ResponseEntity<List<Tournament>> findByYear(@RequestParam(value="text", defaultValue="") String text) {
+	public ResponseEntity<List<TournamentDTO>> findByYear(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
-		List<Tournament> list = service.findByYear(text);
+		List<TournamentDTO> list = service.findByYear(text);
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value="/championsearch")
-	public ResponseEntity<List<Tournament>> findByChampion(@RequestParam(value="text", defaultValue="") String text) {
+	public ResponseEntity<List<TournamentDTO>> findByChampion(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
-		List<Tournament> list = service.findByChampion(text);
+		List<TournamentDTO> list = service.findByChampion(text);
 		return ResponseEntity.ok().body(list);
 	}
 	

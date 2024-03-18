@@ -25,12 +25,20 @@ public class StateService {
 	private CountryService countryService;
 	
 	public List<State> findAll() {
-		return repository.findAll();
+		return repository.searchAll();
 	}
 	
 	public State findById(Long id) {
 		Optional<State> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
+	}
+	
+	public List<State> findByName(String text) {
+		return repository.findByName(text);
+	}
+	
+	public List<State> findByCountry(String text) {
+		return repository.findByCountry(text);
 	}
 	
 	public State insert(State obj) {

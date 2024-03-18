@@ -78,9 +78,9 @@ public class Footballer {
 	public void setPais(Country pais) {
 		this.pais = pais;
 	}
-
+	
 	public TeamDTO getTime() {
-		return new TeamDTO(this.time);
+		return new TeamDTO(time.getId(), time.getNome_popular());
 	}
 
 	public void setTime(Team time) {

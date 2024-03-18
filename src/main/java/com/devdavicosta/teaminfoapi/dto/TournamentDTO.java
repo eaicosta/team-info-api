@@ -1,45 +1,34 @@
-package com.devdavicosta.teaminfoapi.entities;
+package com.devdavicosta.teaminfoapi.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-@Entity
-@Table(name="campeonatos")
-public class Tournament implements Serializable {
-	
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class TournamentDTO implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	
-	@NotBlank
 	private String nome;
-	
-	@NotBlank
 	private String ano_edicao;
+	private TeamDTO time_campeao;
 	
-	@ManyToOne
-	@JoinColumn(name="id_time")
-	private Team time_campeao;
-	
-	public Tournament() {
+	public TournamentDTO() {
 	}
 
-	public Tournament(Long id, @NotBlank String nome, @NotBlank String ano_edicao, Team time_campeao) {
+	public TournamentDTO(Long id, String nome, String ano_edicao, TeamDTO time_campeao) {
 		this.id = id;
 		this.nome = nome;
 		this.ano_edicao = ano_edicao;
 		this.time_campeao = time_campeao;
+	}
+
+	public TournamentDTO(Long id, String nome, String ano_edicao) {
+		this.id = id;
+		this.nome = nome;
+		this.ano_edicao = ano_edicao;
 	}
 
 	public Long getId() {
@@ -66,11 +55,11 @@ public class Tournament implements Serializable {
 		this.ano_edicao = ano_edicao;
 	}
 
-	public Team getTime_campeao() {
+	public TeamDTO getTime_campeao() {
 		return time_campeao;
 	}
 
-	public void setTime_campeao(Team time_campeao) {
+	public void setTime_campeao(TeamDTO time_campeao) {
 		this.time_campeao = time_campeao;
 	}
 
@@ -87,7 +76,7 @@ public class Tournament implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Tournament other = (Tournament) obj;
+		TournamentDTO other = (TournamentDTO) obj;
 		return Objects.equals(id, other.id);
 	}
 }

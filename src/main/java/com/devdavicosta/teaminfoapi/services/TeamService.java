@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import com.devdavicosta.teaminfoapi.dto.RivalDTO;
+import com.devdavicosta.teaminfoapi.dto.TeamDTO;
 import com.devdavicosta.teaminfoapi.entities.Coach;
 import com.devdavicosta.teaminfoapi.entities.Country;
 import com.devdavicosta.teaminfoapi.entities.Stadium;
@@ -44,8 +45,8 @@ public class TeamService {
 	@Autowired
 	private CoachService coachService;
 	
-	public List<Team> findAll() {
-		return repository.findAll();
+	public List<TeamDTO> findAll() {
+		return repository.searchAll();
 	}
 	
 	public Team findById(Long id) {
@@ -53,16 +54,20 @@ public class TeamService {
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
-	public List<Team> findByName(String text) {
-		return repository.findByTeamName(text);
+	public List<TeamDTO> findByName(String text) {
+		return repository.findByName(text);
 	}
 	
-	public List<Team> findByState(String text) {
+	public List<TeamDTO> findByState(String text) {
 		return repository.findByState(text);
 	}
 	
-	public List<Team> findByCountry(String text) {
+	public List<TeamDTO> findByCountry(String text) {
 		return repository.findByCountry(text);
+	}
+	
+	public List<TeamDTO> findByCoach(String text) {
+		return repository.findByCoach(text);
 	}
 	
 	public RivalDTO getRivals(Long id) {

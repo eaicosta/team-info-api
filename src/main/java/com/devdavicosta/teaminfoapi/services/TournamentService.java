@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.devdavicosta.teaminfoapi.dto.TournamentDTO;
 import com.devdavicosta.teaminfoapi.entities.Team;
 import com.devdavicosta.teaminfoapi.entities.Tournament;
 import com.devdavicosta.teaminfoapi.repositories.TournamentRepository;
@@ -24,8 +25,8 @@ public class TournamentService {
 	@Autowired
 	private TeamService teamService;
 	
-	public List<Tournament> findAll() {
-		return repository.findAll();
+	public List<TournamentDTO> findAll() {
+		return repository.searchAll();
 	}
 	
 	public Tournament findById(Long id) {
@@ -34,15 +35,15 @@ public class TournamentService {
 
 	}
 	
-	public List<Tournament> findByName(String text) {
-		return repository.findByTournamentName(text);
+	public List<TournamentDTO> findByName(String text) {
+		return repository.findByName(text);
 	}
 	
-	public List<Tournament> findByYear(String text) {
+	public List<TournamentDTO> findByYear(String text) {
 		return repository.findByYear(text);
 	}
 	
-	public List<Tournament> findByChampion(String text) {
+	public List<TournamentDTO> findByChampion(String text) {
 		return repository.findByChampion(text);
 	}
 	
