@@ -21,6 +21,8 @@ import com.devdavicosta.teaminfoapi.entities.Tournament;
 import com.devdavicosta.teaminfoapi.resources.util.URL;
 import com.devdavicosta.teaminfoapi.services.TournamentService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping(value="/tournaments")
 public class TournamentResource {
@@ -29,18 +31,21 @@ public class TournamentResource {
 	private TournamentService service;
 	
 	@GetMapping
+	@Operation(summary="Traz todos os campeonatos.")
 	public ResponseEntity<List<TournamentDTO>> findAll() {
 		List<TournamentDTO> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value="/{id}")
+	@Operation(summary="Traz o campeonato pelo id.")
 	public ResponseEntity<Tournament> findById(@PathVariable Long id) {
 		Tournament obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
 	@GetMapping(value="/namesearch")
+	@Operation(summary="Traz o(s) campeonato(s) pelo nome.")
 	public ResponseEntity<List<TournamentDTO>> findByName(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
 		List<TournamentDTO> list = service.findByName(text);
@@ -48,6 +53,7 @@ public class TournamentResource {
 	}
 	
 	@GetMapping(value="/yearsearch")
+	@Operation(summary="Traz os campeonatos pelo ano da edição.")
 	public ResponseEntity<List<TournamentDTO>> findByYear(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
 		List<TournamentDTO> list = service.findByYear(text);
@@ -55,6 +61,7 @@ public class TournamentResource {
 	}
 	
 	@GetMapping(value="/championsearch")
+	@Operation(summary="Traz os campeonatos pelos times campeões.")
 	public ResponseEntity<List<TournamentDTO>> findByChampion(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
 		List<TournamentDTO> list = service.findByChampion(text);
@@ -62,6 +69,7 @@ public class TournamentResource {
 	}
 	
 	@PostMapping
+	@Operation(summary="Insere um campeonato.")
 	public ResponseEntity<Tournament> insert(@RequestBody Tournament obj) {
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -69,12 +77,14 @@ public class TournamentResource {
 	}
 	
 	@PutMapping(value="/{id}")
+	@Operation(summary="Atualiza o campeonato pelo id.")
 	public ResponseEntity<Tournament> update(@PathVariable Long id, @RequestBody Tournament obj) {
 		obj = service.update(id, obj);
 		return ResponseEntity.ok().body(obj);
 	}
 	
 	@DeleteMapping(value="/{id}")
+	@Operation(summary="Deleta o campeonato pelo id.")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();

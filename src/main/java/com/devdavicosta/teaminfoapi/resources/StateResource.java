@@ -20,6 +20,8 @@ import com.devdavicosta.teaminfoapi.entities.State;
 import com.devdavicosta.teaminfoapi.resources.util.URL;
 import com.devdavicosta.teaminfoapi.services.StateService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping(value="/states")
 public class StateResource {
@@ -28,18 +30,21 @@ public class StateResource {
 	private StateService service;
 	
 	@GetMapping
+	@Operation(summary="Traz todos os estados.")
 	public ResponseEntity<List<State>> findAll() {
 		List<State> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value="/{id}")
+	@Operation(summary="Traz o estado pelo id.")
 	public ResponseEntity<State> findById(@PathVariable Long id) {
 		State obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
 	@GetMapping(value="/namesearch")
+	@Operation(summary="Traz o(s) estado(s) pelo nome.")
 	public ResponseEntity<List<State>> findByName(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
 		List<State> list = service.findByName(text);
@@ -47,6 +52,7 @@ public class StateResource {
 	}
 	
 	@GetMapping(value="/countrysearch")
+	@Operation(summary="Traz os estados pelo pais.")
 	public ResponseEntity<List<State>> findByCountry(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
 		List<State> list = service.findByCountry(text);
@@ -54,6 +60,7 @@ public class StateResource {
 	}
 	
 	@PostMapping
+	@Operation(summary="Insere um estado.")
 	public ResponseEntity<State> insert(@RequestBody State obj) {
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -61,12 +68,14 @@ public class StateResource {
 	}
 	
 	@PutMapping(value="/{id}")
+	@Operation(summary="Atualiza o estado pelo id.")
 	public ResponseEntity<State> update(@PathVariable Long id, @RequestBody State obj) {
 		obj = service.update(id, obj);
 		return ResponseEntity.ok().body(obj);
 	}
 	
 	@DeleteMapping(value="/{id}")
+	@Operation(summary="Deleta o estado pelo id.")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();

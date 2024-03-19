@@ -9,16 +9,21 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
+import com.devdavicosta.teaminfoapi.dto.FootballerDTO;
 import com.devdavicosta.teaminfoapi.dto.RivalDTO;
 import com.devdavicosta.teaminfoapi.dto.TeamDTO;
+import com.devdavicosta.teaminfoapi.dto.TournamentDTO;
 import com.devdavicosta.teaminfoapi.entities.Coach;
 import com.devdavicosta.teaminfoapi.entities.Country;
 import com.devdavicosta.teaminfoapi.entities.Stadium;
 import com.devdavicosta.teaminfoapi.entities.State;
 import com.devdavicosta.teaminfoapi.entities.Team;
+import com.devdavicosta.teaminfoapi.repositories.FootballerRepository;
 import com.devdavicosta.teaminfoapi.repositories.TeamRepository;
+import com.devdavicosta.teaminfoapi.repositories.TournamentRepository;
 import com.devdavicosta.teaminfoapi.services.exceptions.DatabaseException;
 import com.devdavicosta.teaminfoapi.services.exceptions.ResourceNotFoundException;
 import com.devdavicosta.teaminfoapi.services.exceptions.SameIdException;
@@ -32,6 +37,12 @@ public class TeamService {
 
 	@Autowired
 	private TeamRepository repository;
+	
+	@Autowired
+	private TournamentRepository tournamentRepo;
+	
+	@Autowired
+	private FootballerRepository footballerRepo;
 	
 	@Autowired
 	private CountryService countryService;
@@ -81,6 +92,7 @@ public class TeamService {
 		}
 	}
 	
+	@Transactional
 	public RivalDTO insertRivals(Long idTime, Long idRival) {
 		Team time = repository.findById(idTime).orElseThrow(() -> new ResourceNotFoundException(idTime));
 		Team rival = repository.findById(idRival).orElseThrow(() -> new ResourceNotFoundException(idRival));
@@ -95,10 +107,12 @@ public class TeamService {
 		return new RivalDTO(time);
 	}
 	
+	@Transactional
 	public Team insert(Team obj) {
 		return repository.save(obj);
 	}
 	
+	@Transactional
 	public Team update(Long id, Team obj) {
 		try {
 			Team entity = repository.getReferenceById(id);
@@ -125,6 +139,7 @@ public class TeamService {
 		entity.setTecnico(coach);
 	}
 	
+	@Transactional
 	public Team updatePatch(Long id, Map<String, Object> fields) {
 		try {
 			Optional<Team> optEntity = repository.findById(id);
@@ -151,12 +166,37 @@ public class TeamService {
 		});
 	}
 	
+	@Transactional
+	public void removeTeamsAndAssociatedTournaments(Team team) {
+		for (Team rivalTeam : team.getRivais()) {
+			rivalTeam.getRivais().remove(team);
+		}
+		
+		List<TournamentDTO> tournaments = tournamentRepo.findByChampion(team.getNome_popular());
+		for (TournamentDTO tournament : tournaments) {
+			tournamentRepo.deleteById(tournament.getId());
+		}
+		
+		List<FootballerDTO> footballers = footballerRepo.findByTeam(team.getNome());
+		if (!footballers.isEmpty()) {
+			for (FootballerDTO footballer : footballers) {
+				footballerRepo.deleteById(footballer.getId());
+			}
+		}
+	}
+	
+	@Transactional
 	public void delete(Long id) {
 		try {
-			 if (!repository.existsById(id)) throw new ResourceNotFoundException(id);
-			 repository.deleteById(id);
+			Optional<Team> optionalTeam = repository.findById(id);
+			if (!optionalTeam.isPresent()) throw new ResourceNotFoundException(id);
+			Team team = optionalTeam.get();
+			
+			removeTeamsAndAssociatedTournaments(team);
+			
+			repository.deleteById(id);
 		 } catch (DataIntegrityViolationException e) {
-			 throw new DatabaseException(e.getMessage());
+			 throw new DatabaseException("Data integrity constraint violation.");
 		 }
 	}
 }

@@ -20,6 +20,8 @@ import com.devdavicosta.teaminfoapi.entities.Position;
 import com.devdavicosta.teaminfoapi.resources.util.URL;
 import com.devdavicosta.teaminfoapi.services.PositionService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping(value="/positions")
 public class PositionResource {
@@ -28,18 +30,21 @@ public class PositionResource {
 	private PositionService service;
 	
 	@GetMapping
+	@Operation(summary="Traz todas as posições.")
 	public ResponseEntity<List<Position>> findAll() {
 		List<Position> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value="/{id}")
+	@Operation(summary="Traz a posição pelo id.")
 	public ResponseEntity<Position> findById(@PathVariable Long id) {
 		Position obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
 	@GetMapping(value="/namesearch")
+	@Operation(summary="Traz a(s) posição(ões) pelo nome.")
 	public ResponseEntity<List<Position>> findByName(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
 		List<Position> list = service.findByName(text);
@@ -47,6 +52,7 @@ public class PositionResource {
 	}
 	
 	@PostMapping
+	@Operation(summary="Insere uma posição.")
 	public ResponseEntity<Position> insert(@RequestBody Position obj) {
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -54,12 +60,14 @@ public class PositionResource {
 	}
 	
 	@PutMapping(value="/{id}")
+	@Operation(summary="Atualiza uma posição pelo id.")
 	public ResponseEntity<Position> update(@PathVariable Long id, @RequestBody Position obj) {
 		obj = service.update(id, obj);
 		return ResponseEntity.ok().body(obj);
 	}
 	
 	@DeleteMapping(value="/{id}")
+	@Operation(summary="Deleta uma posição pelo id.")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();

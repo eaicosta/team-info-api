@@ -33,7 +33,7 @@ public class Footballer {
 	private Country pais;
 	
 	@ManyToOne
-	@JoinColumn(name="id_time")
+	@JoinColumn(name="id_time", nullable=true)
 	private Team time;
 
 	public Footballer() {

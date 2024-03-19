@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.devdavicosta.teaminfoapi.entities.Country;
 import com.devdavicosta.teaminfoapi.repositories.CountryRepository;
@@ -33,10 +34,12 @@ public class CountryService {
 		return repository.findByName(text);
 	}
 	
+	@Transactional
 	public Country insert(Country obj) {
 		return repository.save(obj);
 	}
 	
+	@Transactional
 	public Country update(Long id, Country obj) {
 		try {
 			Country entity = repository.getReferenceById(id);
@@ -51,12 +54,13 @@ public class CountryService {
 		entity.setNome(obj.getNome());
 	}
 	
+	@Transactional
 	public void delete(Long id) {
 		try {
 			 if (!repository.existsById(id)) throw new ResourceNotFoundException(id);
 			 repository.deleteById(id);
 		 } catch (DataIntegrityViolationException e) {
-			 throw new DatabaseException(e.getMessage());
+			 throw new DatabaseException("Data integrity constraint violation.");
 		 }
 	}
 }

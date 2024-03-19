@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.devdavicosta.teaminfoapi.dto.TournamentDTO;
 import com.devdavicosta.teaminfoapi.entities.Team;
@@ -47,10 +48,12 @@ public class TournamentService {
 		return repository.findByChampion(text);
 	}
 	
+	@Transactional
 	public Tournament insert(Tournament obj) {
 		return repository.save(obj);
 	}
 	
+	@Transactional
 	public Tournament update(Long id, Tournament obj) {
 		try {
 			Tournament entity = repository.getReferenceById(id);
@@ -68,12 +71,13 @@ public class TournamentService {
 		entity.setTime_campeao(team);
 	}
 	
+	@Transactional
 	public void delete(Long id) {
 		try {
 			 if (!repository.existsById(id)) throw new ResourceNotFoundException(id);
 			 repository.deleteById(id);
 		 } catch (DataIntegrityViolationException e) {
-			 throw new DatabaseException(e.getMessage());
+			 throw new DatabaseException("Data integrity constraint violation.");
 		 }
 	}
 }

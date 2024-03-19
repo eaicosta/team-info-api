@@ -43,7 +43,7 @@ public class FootballerDTO implements Serializable {
 		this.nome = nome;
 		this.time = time;
 	}
-	
+
 	public FootballerDTO(Long id, String nome, Position posicao, Country pais, TeamDTO time) {
 		this.id = id;
 		this.nome = nome;

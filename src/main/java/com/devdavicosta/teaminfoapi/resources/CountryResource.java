@@ -20,6 +20,8 @@ import com.devdavicosta.teaminfoapi.entities.Country;
 import com.devdavicosta.teaminfoapi.resources.util.URL;
 import com.devdavicosta.teaminfoapi.services.CountryService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping(value="/countries")
 public class CountryResource {
@@ -28,18 +30,21 @@ public class CountryResource {
 	private CountryService service;
 	
 	@GetMapping
+	@Operation(summary="Traz todos os paises.")
 	public ResponseEntity<List<Country>> findAll() {
 		List<Country> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value="/{id}")
+	@Operation(summary="Traz o pais pelo id.")
 	public ResponseEntity<Country> findById(@PathVariable Long id) {
 		Country obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
 	@GetMapping(value="/namesearch")
+	@Operation(summary="Traz o(s) pais(es) pelo nome.")
 	public ResponseEntity<List<Country>> findByName(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
 		List<Country> list = service.findByName(text);
@@ -47,6 +52,7 @@ public class CountryResource {
 	}
 	
 	@PostMapping
+	@Operation(summary="Insere um pais.")
 	public ResponseEntity<Country> insert(@RequestBody Country obj) {
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -54,12 +60,14 @@ public class CountryResource {
 	}
 	
 	@PutMapping(value="/{id}")
+	@Operation(summary="Atualiza o pais pelo id.")
 	public ResponseEntity<Country> update(@PathVariable Long id, @RequestBody Country obj) {
 		obj = service.update(id, obj);
 		return ResponseEntity.ok().body(obj);
 	}
 	
 	@DeleteMapping(value="/{id}")
+	@Operation(summary="Deleta o pais pelo id.")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();

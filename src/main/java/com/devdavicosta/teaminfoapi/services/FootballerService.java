@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.devdavicosta.teaminfoapi.dto.FootballerDTO;
 import com.devdavicosta.teaminfoapi.entities.Country;
@@ -58,10 +59,12 @@ public class FootballerService {
 		return repository.findByCountry(text);
 	}
 	
+	@Transactional
 	public Footballer insert(Footballer obj) {
 		return repository.save(obj);
 	}
 	
+	@Transactional
 	public Footballer update(Long id, Footballer obj) {
 		try {
 			Footballer entity = repository.getReferenceById(id);
@@ -82,12 +85,13 @@ public class FootballerService {
 		entity.setTime(time);
 	}
 	
+	@Transactional
 	public void delete(Long id) {
 		try {
 			 if (!repository.existsById(id)) throw new ResourceNotFoundException(id);
 			 repository.deleteById(id);
 		 } catch (DataIntegrityViolationException e) {
-			 throw new DatabaseException(e.getMessage());
+			 throw new DatabaseException("Data integrity constraint violation.");
 		 }
 	}
 }

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.devdavicosta.teaminfoapi.entities.Stadium;
 import com.devdavicosta.teaminfoapi.entities.State;
@@ -41,10 +42,12 @@ public class StadiumService {
 		return repository.findByState(text);
 	}
 	
+	@Transactional
 	public Stadium insert(Stadium obj) {
 		return repository.save(obj);
 	}
 	
+	@Transactional
 	public Stadium update(Long id, Stadium obj) {
 		try {
 			Stadium entity = repository.getReferenceById(id);
@@ -62,12 +65,13 @@ public class StadiumService {
 		entity.setEstado(state);
 	}
 	
+	@Transactional
 	public void delete(Long id) {
 		try {
 			 if (!repository.existsById(id)) throw new ResourceNotFoundException(id);
 			 repository.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
-			 throw new DatabaseException(e.getMessage());
+			 throw new DatabaseException("Data integrity constraint violation.");
 		}
 	}
 }

@@ -20,6 +20,8 @@ import com.devdavicosta.teaminfoapi.entities.Stadium;
 import com.devdavicosta.teaminfoapi.resources.util.URL;
 import com.devdavicosta.teaminfoapi.services.StadiumService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping(value="/stadiums")
 public class StadiumResource {
@@ -28,18 +30,21 @@ public class StadiumResource {
 	private StadiumService service;
 
 	@GetMapping
+	@Operation(summary="Traz todos os estádios.")
 	public ResponseEntity<List<Stadium>> findAll() {
 		List<Stadium> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value="/{id}")
+	@Operation(summary="Traz o estádio pelo id.")
 	public ResponseEntity<Stadium> findById(@PathVariable Long id) {
 		Stadium obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
 	@GetMapping(value="/namesearch")
+	@Operation(summary="Traz o(s) estádio(s) pelo nome.")
 	public ResponseEntity<List<Stadium>> findByName(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
 		List<Stadium> list = service.findByName(text);
@@ -47,6 +52,7 @@ public class StadiumResource {
 	}
 	
 	@GetMapping(value="/statesearch")
+	@Operation(summary="Traz os estádios pelo estado.")
 	public ResponseEntity<List<Stadium>> findByState(@RequestParam(value="text", defaultValue="") String text) {
 		text = URL.decodeParam(text);
 		List<Stadium> list = service.findByState(text);
@@ -54,6 +60,7 @@ public class StadiumResource {
 	}
 	
 	@PostMapping
+	@Operation(summary="Insere um estádio.")
 	public ResponseEntity<Stadium> insert(@RequestBody Stadium obj) {
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -61,12 +68,14 @@ public class StadiumResource {
 	}
 	
 	@PutMapping(value="/{id}")
+	@Operation(summary="Atualiza o estádio pelo id.")
 	public ResponseEntity<Stadium> update(@PathVariable Long id, @RequestBody Stadium obj) {
 		obj = service.update(id, obj);
 		return ResponseEntity.ok().body(obj);
 	}
 	
 	@DeleteMapping(value="/{id}")
+	@Operation(summary="Deleta o estádio pelo id.")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
